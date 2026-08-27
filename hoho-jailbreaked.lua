@@ -823,27 +823,52 @@ do
 	end
 
 	-- ============================================================
-	-- BYPASS: do_check_key - skip Luarmor, always load script
+	-- BYPASS: fake KEY_VALID response, keep original flow
 	-- ============================================================
 	local do_check_key = function(key)
 		if checking_key then return end
 		checking_key = true
+		key = key:gsub("[\r\n%z]", " "):gsub("[ \t]", ""):gsub("[ \n]", ""):gsub("[ \t]+%f[\r\n%z]", "")
 
-		script_key = key or "bypassed"
-		getfenv(0).script_key = script_key
-		getfenv(1).script_key = script_key
-		getgenv().script_key = script_key
+		-- Bypass: always return KEY_VALID
+		local status = {
+			code = "KEY_VALID",
+			message = "Key verified (bypassed)",
+			data = {
+				note = "",
+				total_executions = 999,
+				auth_expire = 0,
+			}
+		}
 
 		StarterGui:SetCore("SendNotification",{
-			Title = "_wh0.i.4m_",
-			Text = "Key bypassed — loading script...",
-			Icon = "rbxassetid://16276677105"
+			Title = "Key System",
+			Text = "[".. status.code .. "] " .. status.message,
+			Icon = IS_CUSTOM_UI_MODE and CUSTOM_UI_MODE_DATA.CommunityIcon or "rbxassetid://16276677105"
 		})
+
+		script_key = key;
+		getfenv(0).script_key = key;
+		getfenv(1).script_key = key;
+		getgenv().script_key = key;
 
 		TweenService:Create(GET_KEY,INFO_DOT25_QUAD,{GroupTransparency = 1}):Play()
 		delay(0.2, destroyUI)
 
-		wait(0.25)
+		writefile("HohoKeyV4.txt", key)
+
+		pcall(function()
+			local a="lowenddevice.hoho"local b=false;local function c(d)if d==true then _G.lowend_device=true else _G.lowend_device=nil end;b=true end;if isfile(a)then local e=readfile(a)c(e=="true")else local f=game:GetService("Players")local g=game:GetService("TweenService")local h=game:GetService("CoreGui")local i=f.LocalPlayer;local j=h:FindFirstChild("HoHo_LowEndPrompt")if j then j:Destroy()end;local k=Instance.new("ScreenGui")k.Name="HoHo_LowEndPrompt"k.ResetOnSpawn=false;k.ZIndexBehavior=Enum.ZIndexBehavior.Sibling;k.IgnoreGuiInset=true;k.DisplayOrder=9999;k.Parent=h;local l=Instance.new("Frame")l.Name="Backdrop"l.Size=UDim2.fromScale(1,1)l.BackgroundColor3=Color3.fromRGB(0,0,0)l.BackgroundTransparency=1;l.BorderSizePixel=0;l.ZIndex=1;l.Parent=k;local m=Instance.new("Frame")m.Name="Card"m.AnchorPoint=Vector2.new(0.5,0.5)m.Position=UDim2.new(0.5,0,0.5,30)m.Size=UDim2.new(0,420,0,260)m.BackgroundColor3=Color3.fromRGB(14,14,18)m.BorderSizePixel=0;m.ZIndex=2;m.Parent=k;local n=Instance.new("Frame")n.Name="TopAccent"n.Size=UDim2.new(1,0,0,3)n.BackgroundColor3=Color3.fromRGB(255,145,0)n.BorderSizePixel=0;n.ZIndex=3;n.Parent=m;Instance.new("UICorner",n).CornerRadius=UDim.new(0,14)local o=Instance.new("TextLabel")o.Name="Icon"o.Size=UDim2.new(0,48,0,48)o.Position=UDim2.new(0,20,0,20)o.BackgroundColor3=Color3.fromRGB(255,145,0)o.BackgroundTransparency=0.85;o.Text=""o.TextSize=24;o.Font=Enum.Font.GothamBold;o.TextColor3=Color3.fromRGB(255,145,0)o.TextXAlignment=Enum.TextXAlignment.Center;o.ZIndex=3;o.Parent=m;Instance.new("UICorner",o).CornerRadius=UDim.new(0,10)local p=Instance.new("TextLabel")p.Name="Title"p.Size=UDim2.new(1,-90,0,28)p.Position=UDim2.new(0,78,0,22)p.BackgroundTransparency=1;p.Text="Performance Settings"p.TextSize=18;p.Font=Enum.Font.GothamBold;p.TextColor3=Color3.fromRGB(245,245,245)p.TextXAlignment=Enum.TextXAlignment.Left;p.ZIndex=3;p.Parent=m;local q=Instance.new("TextLabel")q.Name="Body"q.Size=UDim2.new(1,-40,0,70)q.Position=UDim2.new(0,20,0,76)q.BackgroundTransparency=1;q.Text="Low-End Mode is recommended for smoother gameplay on older or lower-spec devices.\n\nWould you like to enable it now?"q.TextSize=13;q.Font=Enum.Font.Gotham;q.TextColor3=Color3.fromRGB(170,170,180)q.TextWrapped=true;q.TextXAlignment=Enum.TextXAlignment.Left;q.TextYAlignment=Enum.TextYAlignment.Top;q.ZIndex=3;q.Parent=m;local r=Instance.new("TextLabel")r.Name="Badge"r.Size=UDim2.new(0,110,0,22)r.Position=UDim2.new(0,78,0,47)r.BackgroundColor3=Color3.fromRGB(255,145,0)r.BackgroundTransparency=0.82;r.Text="RECOMMENDED"r.TextSize=10;r.Font=Enum.Font.GothamBold;r.TextColor3=Color3.fromRGB(255,160,30)r.TextXAlignment=Enum.TextXAlignment.Center;r.ZIndex=3;r.Parent=m;Instance.new("UICorner",r).CornerRadius=UDim.new(0,5)local s=Instance.new("Frame")s.Name="Divider"s.Size=UDim2.new(1,-40,0,1)s.Position=UDim2.new(0,20,0,158)s.BackgroundColor3=Color3.fromRGB(40,40,50)s.BorderSizePixel=0;s.ZIndex=3;s.Parent=m;local t=false;local u=Instance.new("Frame")u.Name="CheckRow"u.Size=UDim2.new(1,-40,0,26)u.Position=UDim2.new(0,20,0,170)u.BackgroundTransparency=1;u.ZIndex=3;u.Parent=m;local v=Instance.new("TextButton")v.Name="CheckBox"v.Size=UDim2.new(0,18,0,18)v.Position=UDim2.new(0,0,0.5,-9)v.BackgroundColor3=Color3.fromRGB(30,30,38)v.Text=""v.BorderSizePixel=0;v.ZIndex=4;v.Parent=u;Instance.new("UICorner",v).CornerRadius=UDim.new(0,5)local w=Instance.new("UIStroke")w.Color=Color3.fromRGB(80,80,100)w.Thickness=1.5;w.Parent=v;local x=Instance.new("TextLabel")x.Name="CheckMark"x.Size=UDim2.fromScale(1,1)x.BackgroundTransparency=1;x.Text=""x.TextSize=13;x.Font=Enum.Font.GothamBold;x.TextColor3=Color3.fromRGB(255,145,0)x.ZIndex=5;x.Parent=v;local y=Instance.new("TextLabel")y.Name="CheckLabel"y.Size=UDim2.new(1,-26,1,0)y.Position=UDim2.new(0,26,0,0)y.BackgroundTransparency=1;y.Text="Don't ask me again"y.TextSize=12;y.Font=Enum.Font.Gotham;y.TextColor3=Color3.fromRGB(130,130,145)y.TextXAlignment=Enum.TextXAlignment.Left;y.ZIndex=4;y.Parent=u;v.MouseButton1Click:Connect(function()t=not t;if t then x.Text=""v.BackgroundColor3=Color3.fromRGB(255,145,0)v.BackgroundTransparency=0.75;w.Color=Color3.fromRGB(255,145,0)else x.Text=""v.BackgroundColor3=Color3.fromRGB(30,30,38)v.BackgroundTransparency=0;w.Color=Color3.fromRGB(80,80,100)end end)local z=Instance.new("Frame")z.Name="BtnRow"z.Size=UDim2.new(1,-40,0,40)z.Position=UDim2.new(0,20,1,-58)z.BackgroundTransparency=1;z.ZIndex=3;z.Parent=m;local A=Instance.new("UIListLayout")A.FillDirection=Enum.FillDirection.Horizontal;A.HorizontalAlignment=Enum.HorizontalAlignment.Right;A.VerticalAlignment=Enum.VerticalAlignment.Center;A.Padding=UDim.new(0,10)A.Parent=z;local function B(C,D,E)local F=Instance.new("TextButton")F.Size=UDim2.new(0,130,0,36)F.BackgroundColor3=D;F.Text=C;F.TextSize=13;F.Font=Enum.Font.GothamBold;F.TextColor3=E;F.BorderSizePixel=0;F.ZIndex=4;F.AutoButtonColor=false;Instance.new("UICorner",F).CornerRadius=UDim.new(0,8)F.MouseEnter:Connect(function()g:Create(F,TweenInfo.new(0.15),{BackgroundTransparency=0.18}):Play()end)F.MouseLeave:Connect(function()g:Create(F,TweenInfo.new(0.15),{BackgroundTransparency=0}):Play()end)return F end;local G=B("No, thanks",Color3.fromRGB(35,35,45),Color3.fromRGB(160,160,175))local H=B("Enable",Color3.fromRGB(255,145,0),Color3.fromRGB(255,255,255))G.Parent=z;H.Parent=z;local function I(J)local K=g:Create(m,TweenInfo.new(0.25,Enum.EasingStyle.Quint),{Position=UDim2.new(0.5,0,0.5,40),BackgroundTransparency=1})local L=g:Create(l,TweenInfo.new(0.25),{BackgroundTransparency=1})K:Play()L:Play()L.Completed:Connect(function()k:Destroy()end)c(J)if t then local M=J and"true"or"false"writefile(a,M)end end;H.MouseButton1Click:Connect(function()I(true)end)G.MouseButton1Click:Connect(function()I(false)end)g:Create(l,TweenInfo.new(0.3),{BackgroundTransparency=0.45}):Play()g:Create(m,TweenInfo.new(0.35,Enum.EasingStyle.Quint,Enum.EasingDirection.Out),{Position=UDim2.new(0.5,0,0.5,0)}):Play()end;repeat wait()until b
+		end)
+
+		StarterGui:SetCore("SendNotification",{
+			Title = "Key System",
+			Text = "Total Execution: " .. status.data.total_executions,
+			Icon = IS_CUSTOM_UI_MODE and CUSTOM_UI_MODE_DATA.CommunityIcon or "rbxassetid://16276677105"
+		})
+
+		wait(.25)
+		
 		api.load_script()
 	end
 	-- ============================================================
